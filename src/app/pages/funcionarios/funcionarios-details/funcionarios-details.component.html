@@ -1,0 +1,85 @@
+<div class="flex-row mt-5 mb-5">
+    <div class="d-flex justify-content-between">
+        <h1 class="h2">
+            {{pageTitle}}
+        </h1>
+    </div>
+</div>
+
+<form [formGroup]="funcionarioForm" (ngSubmit)="submitForm()" *ngIf="!loading">
+    <div class="card">
+        <div class="card-header">
+            Dados do funcionário
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <label for="nome">Nome*</label>
+                        <input type="text" class="form-control" id="nome" formControlName="nome">
+                        <small class="text-danger" *ngIf="funcionarioForm.get('nome')?.invalid && funcionarioForm.get('nome')?.touched">
+                            Nome é obrigatório.
+                        </small>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="sobrenome">Sobrenome*</label>
+                        <input type="text" class="form-control" id="sobrenome" formControlName="sobrenome">
+                        <small class="text-danger" *ngIf="funcionarioForm.get('sobrenome')?.invalid && funcionarioForm.get('sobrenome')?.touched">
+                            Sobrenome é obrigatório.
+                        </small>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="email">E-mail*</label>
+                        <input type="email" class="form-control" id="email" formControlName="email">
+                        <small class="text-danger" *ngIf="funcionarioForm.get('email')?.invalid && funcionarioForm.get('email')?.touched">
+                            E-mail válido é obrigatório.
+                        </small>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="documento">Documento*</label>
+                        <input type="text" documentMask class="form-control" id="documento" formControlName="documento">
+                        <small class="text-danger" *ngIf="funcionarioForm.get('documento')?.invalid && funcionarioForm.get('documento')?.touched">
+                            Documento válido é obrigatório.
+                        </small>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="telefone">Telefone*</label>
+                        <input type="tel" phoneMask class="form-control" id="telefone" formControlName="telefone">
+                        <small class="text-danger" *ngIf="funcionarioForm.get('telefone')?.invalid && funcionarioForm.get('telefone')?.touched">
+                            Telefone é obrigatório.
+                        </small>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="data-nascimento">Data Nascimento*</label>
+                        <input type="date" class="form-control" id="data-nascimento" formControlName="dataNascimento">
+                        <small class="text-danger" *ngIf="funcionarioForm.get('dataNascimento')?.invalid && funcionarioForm.get('dataNascimento')?.touched">
+                            Data de nascimento é obrigatória.
+                        </small>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="nome-gestor">Nome Gestor</label>
+                        <select id="nome-gestor" class="form-control" formControlName="idGestor">
+                            <option [value]="null" selected>Não possui</option>
+                            <option *ngFor="let option of selectOptions" [value]="option.id">
+                              {{ option.nome }}
+                            </option>
+                          </select>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="is-gestor">É gestor?*</label>
+                        <select class="form-control" id="is-gestor" formControlName="isGestor" required>
+                            <option [value]="true">Sim</option>
+                            <option [value]="false">Não</option>
+                        </select>
+                        <small class="text-danger" *ngIf="funcionarioForm.get('isGestor')?.invalid && funcionarioForm.get('isGestor')?.touched">
+                            'É gestor?' é obrigatório.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end">
+        <button [disabled]="submittingForm || funcionarioForm.invalid" type="submit" class="btn btn-primary btn-lg float-right mt-3">Salvar</button>
+    </div>
+</form>

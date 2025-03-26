@@ -1,0 +1,22 @@
+<div class="flex-row mt-5 mb-5">
+    <div class="d-flex justify-content-between">
+        <h1 class="h2">
+            Funcionários
+        </h1>
+        <a [routerLink]="['criar']" class="btn btn-sm btn-outline-success p-3 float-right"><span>+ Cadastrar</span></a>
+    </div>
+</div>
+
+<app-table
+  [columns]="columns"
+  [data]="funcionarios"
+  (onEdit)="editFuncionario($event)"
+  (onDelete)="openModal($event)">
+</app-table>
+
+<app-modal-confirm
+  #confirmModal
+  [title]="'Excluir Funcionário'"
+  [message]="'Tem certeza de que deseja excluir este funcionário?'"
+  (confirmed)="deleteFuncionario()">
+</app-modal-confirm>

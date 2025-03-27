@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { DocumentMaskDirective } from '../../../directives/document-mask-directive';
 import { PhoneMaskDirective } from '../../../directives/phone-mask-directive';
+import { EncryptionService } from '../../../services/encryption.service';
 
 @Component({
   selector: 'app-funcionarios-details',
@@ -30,7 +31,8 @@ export class FuncionariosDetailsComponent implements OnInit, AfterContentChecked
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private encryptService: EncryptionService
   ){}
 
   currentAction: string = "";
@@ -71,7 +73,8 @@ export class FuncionariosDetailsComponent implements OnInit, AfterContentChecked
         telefone: [null, [Validators.required,Validators.pattern(/^(\d{10}|\d{11})$/)]],
         dataNascimento: [null, [Validators.required]],
         idGestor: [null],
-        isGestor: [false, [Validators.required]]
+        isGestor: [false, [Validators.required]],
+        senha: [null, [Validators.required, Validators.minLength(10)]]
       })
   }
 
@@ -83,12 +86,15 @@ export class FuncionariosDetailsComponent implements OnInit, AfterContentChecked
       .subscribe({
         next: (funcionario) => {
           this.funcionario = funcionario;
+          this.funcionario.senha = this.encryptService.decrypt(this.funcionario.senha);
           this.funcionarioForm?.patchValue(this.funcionario);
           this.funcionarioForm.get('idGestor')?.setValue(this.funcionario.idGestor);
-          console.log(this.funcionario.idGestor);
           this.loading = false;
         },
-        error: (error) => alert("Ocorreu um erro, tente novamente mais tarde!")
+        error: (error) => {
+          if(!error.status)
+            this.toastr.error(error.error.message);
+        }
       })
     }else{
       this.loading = false;
@@ -99,10 +105,10 @@ export class FuncionariosDetailsComponent implements OnInit, AfterContentChecked
     this.service.getAll(true).subscribe({
       next:(data) => {
         this.selectOptions = data.map(x => ({ id: x.id, nome: `${x.nome} ${x.sobrenome}` }));
-        console.log(this.selectOptions);
       },
       error: (error) => {
-        this.toastr.error(error.error.message);
+        if(!error.status)
+          this.toastr.error(error.error.message);
       }
     });
   }
@@ -124,7 +130,7 @@ export class FuncionariosDetailsComponent implements OnInit, AfterContentChecked
       next: (funcionario) =>{
         this.funcionario = funcionario;
         this.toastr.success("Funcionário criado com sucesso!");
-        this.redirecionarNavegacao();
+        this.redirecionarNavegacao(`/${this.funcionario.id}/editar`);
       },
       error: (error) =>{
         this.toastr.error(error.error.message);
@@ -138,7 +144,7 @@ export class FuncionariosDetailsComponent implements OnInit, AfterContentChecked
     ({
       next: (data) =>{
         this.toastr.success("Funcionário editado com sucesso!");
-        this.redirecionarNavegacao();
+        this.redirecionarNavegacao(null);
       },
       error: (error) =>{
         this.toastr.error(error.error.message);
@@ -146,12 +152,14 @@ export class FuncionariosDetailsComponent implements OnInit, AfterContentChecked
     })
   }
 
-  private redirecionarNavegacao(){
-    this.router.navigateByUrl(`funcionarios/${this.funcionario.id}/editar`, {skipLocationChange: true});
+  private redirecionarNavegacao(rota: string|null){
+    rota = rota === null ? '' : rota;
+    this.router.navigateByUrl(`funcionarios${rota}`, {skipLocationChange: true});
   }
 
   private tratarFuncionarioEnvio(){
     this.funcionario.isGestor = `${this.funcionario.isGestor}` == "true";
+    this.funcionario.senha = this.encryptService.encrypt(this.funcionario.senha);
     if(this.funcionario.idGestor != null)
       this.funcionario.nomeGestor = this.selectOptions.find(x => x.id == this.funcionario.idGestor)?.nome
   }

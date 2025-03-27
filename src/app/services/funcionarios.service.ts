@@ -7,6 +7,7 @@ import { Funcionario } from '../models/funcionario.model';
 @Injectable({
   providedIn: 'root'
 })
+
 export class FuncionariosService {
 
   private apiPath: string = "api/funcionarios"

@@ -10,4 +10,5 @@ export class Funcionario{
     dataNascimento!: Date;
     isGestor: boolean = false;
     idGestor!: string;
+    senha!: string;
 }

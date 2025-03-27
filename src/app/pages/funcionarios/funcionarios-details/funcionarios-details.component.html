@@ -75,6 +75,13 @@
                             'É gestor?' é obrigatório.
                         </small>
                     </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="senha">Senha</label>
+                        <input type="password" class="form-control" id="senha" formControlName="senha">
+                        <small class="text-danger" *ngIf="funcionarioForm.get('senha')?.invalid && funcionarioForm.get('senha')?.touched">
+                            Senha é obrigatória.
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>

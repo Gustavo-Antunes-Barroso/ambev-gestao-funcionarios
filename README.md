@@ -13,4 +13,4 @@ Projeto desenvolvido em Angular 19, integrado com uma API .NET 8.
 3. Acesse em: `http://localhost:4200`
 
 ## Observação
-Certifique-se de que a API .NET 8 está rodando e acessível no endereço configurado no `environment.ts`.
+Certifique-se de que a API .NET 8 está rodando e acessível no endereço configurado no `constants.ts`.

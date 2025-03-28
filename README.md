@@ -13,4 +13,5 @@ Projeto desenvolvido em Angular 19, integrado com uma API .NET 8.
 3. Acesse em: `http://localhost:4200`
 
 ## Observação
+Utilize o usuário: gustavo.barroso@ambev.com e a senha: testeambev123 para se autenticar
 Certifique-se de que a API .NET 8 está rodando e acessível no endereço configurado no `constants.ts`.
